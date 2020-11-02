@@ -15,4 +15,6 @@ import model.Botnet;
  */
 public interface IBotnet extends Remote{
     public Botnet getBotnet() throws RemoteException;
+    public void testing() throws RemoteException;
+    public void runCommand(String cmd) throws RemoteException;
 }
