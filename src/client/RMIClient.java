@@ -24,7 +24,7 @@ public class RMIClient {
         try {
             IBotnet botnet = new BotnetImpl();
             LocateRegistry.createRegistry(1234);
-            Naming.bind("rmi://192.168.1.10:1234/BotnetRMI", botnet);
+            Naming.bind("rmi://127.0.0.1:1234/BotnetRMI", botnet);
             System.out.println(">>>>>INFO: RMI Server started!!!!!!!!");
         } catch (RemoteException ex) {
             Logger.getLogger(RMIClient.class.getName()).log(Level.SEVERE, null, ex);
