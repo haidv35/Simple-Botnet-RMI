@@ -26,8 +26,8 @@ public class RMIServer {
         try {
             IBotnet botnet = (IBotnet) Naming.lookup("rmi://192.168.1.10:1234/BotnetRMI");
             Scanner scanner= new Scanner(System.in);
-            String cmd = scanner.nextLine();
-            botnet.runCommand(cmd);
+                String cmd = scanner.nextLine();
+                botnet.runCommand(cmd);
         } catch (RemoteException ex) {
             Logger.getLogger(RMIServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NotBoundException ex) {
