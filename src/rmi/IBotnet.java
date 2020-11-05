@@ -5,8 +5,10 @@
  */
 package rmi;
 
+import java.io.BufferedReader;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import model.Botnet;
 
 /**
@@ -16,5 +18,5 @@ import model.Botnet;
 public interface IBotnet extends Remote{
     public Botnet getBotnet() throws RemoteException;
     public void testing() throws RemoteException;
-    public void runCommand(String cmd) throws RemoteException;
+    public ArrayList<String> runCommand(String cmd) throws RemoteException;
 }
