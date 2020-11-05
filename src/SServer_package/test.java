@@ -19,14 +19,6 @@ import org.bson.Document;
  */
 public class test {
     public static void main(String[] args) {    
-        MongoClient mongo = new MongoClient( "localhost" , 27017 ); 
-        MongoCredential credential;
-	credential = MongoCredential.createCredential("admin", "masked_faceid", "vinai123".toCharArray());
-        MongoDatabase database = mongo.getDatabase("masked_faceid");
-//        MongoCollection<Document> collection = database.getCollection("api_log");
         
-        for (String name : database.listCollectionNames()) { 
-           System.out.println(name); 
-        } 
     }
 }

