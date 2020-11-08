@@ -35,17 +35,21 @@ public class RMIClient {
         Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
         while( ifaces.hasMoreElements() )
         {
-          NetworkInterface iface = ifaces.nextElement();
-          Enumeration<InetAddress> addresses = iface.getInetAddresses();
+            NetworkInterface iface = ifaces.nextElement();
+            String name = iface.getName();
+//            if (name.equals("wlp0s20f3")){
+            Enumeration<InetAddress> addresses = iface.getInetAddresses();
 
-          while( addresses.hasMoreElements() )
-          {
-            InetAddress addr = addresses.nextElement();
-            if( addr instanceof Inet4Address && !addr.isLoopbackAddress() )
+            while( addresses.hasMoreElements() )
             {
-              return addr.toString();
+                InetAddress addr = addresses.nextElement();
+                if( addr instanceof Inet4Address && !addr.isLoopbackAddress() )
+                {
+                  return addr.toString();
+                }
             }
-          }
+//            }
+
         }
         return null;
     }
