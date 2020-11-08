@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package client;
+package model;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -17,7 +17,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Botnet;
 import rmi.IBotnet;
 
 /**
@@ -27,12 +26,6 @@ import rmi.IBotnet;
 public class BotnetImpl extends UnicastRemoteObject implements IBotnet{
 
     public BotnetImpl() throws RemoteException {
-    }
-    
-    @Override
-    public Botnet getBotnet() throws RemoteException {
-        Botnet b = new Botnet();
-        return b;
     }
     
     public void testing() throws RemoteException {

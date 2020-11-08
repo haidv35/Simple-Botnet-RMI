@@ -5,6 +5,7 @@
  */
 package client;
 
+import model.BotnetImpl;
 import SServer_package.SServer;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -56,7 +57,8 @@ public class RMIClient {
             LocateRegistry.createRegistry(1234);
             String ip = getIP();
             Naming.bind("rmi:/" + ip + ":1234/BotnetRMI", botnet);
-            System.out.println(">>>>>INFO: RMI Server started!!!!!!!!");
+            System.out.println(">>>>>INFO: RMI Client started!!!!!!!!");
+            
             Socket socket = new Socket("127.0.0.1", 2345);
             BufferedWriter writer = new BufferedWriter (new OutputStreamWriter(socket.getOutputStream()));
             if (ip != null){

