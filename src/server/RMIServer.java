@@ -50,8 +50,8 @@ public class RMIServer {
                 IBotnet botnet = (IBotnet) Naming.lookup("rmi:/" + ip + ":" + "1234" + "/BotnetRMI");
                 botnet.testing();
                 
-                System.out.println("Install app type: install");
-                System.out.println("Run command type: exec");
+                System.out.println(">>Install app type: install");
+                System.out.println(">>Run command type: exec");
                 String install = scanner.nextLine();
                 
                 if(install.equals("install")){
