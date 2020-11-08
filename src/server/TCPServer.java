@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package SServer_package;
+package server;
 
 /**
  *
@@ -19,9 +19,10 @@ import org.bson.Document;
  *
  * @author www.codejava.net
  */
-public class SServer extends Thread {
+public class TCPServer extends Thread {
     private int port;
-    public SServer(int port){
+    
+    public TCPServer(int port){
         this.port = port;
     }
 

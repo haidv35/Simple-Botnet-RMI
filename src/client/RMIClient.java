@@ -5,7 +5,8 @@
  */
 package client;
 
-import SServer_package.SServer;
+import model.BotnetImpl;
+import server.TCPServer;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -36,7 +37,7 @@ public class RMIClient {
         while( ifaces.hasMoreElements() )
         {
             NetworkInterface iface = ifaces.nextElement();
-            String name = iface.getName();
+//            String name = iface.getName();
 //            if (name.equals("wlp0s20f3")){
             Enumeration<InetAddress> addresses = iface.getInetAddresses();
 
