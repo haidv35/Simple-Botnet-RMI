@@ -5,17 +5,12 @@
  */
 package client;
 
-import model.BotnetImpl;
-import server.TCPServer;
+import model.IBotnet;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.rmi.RemoteException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import rmi.IBotnet;
 import java.net.MalformedURLException;
 import java.net.NetworkInterface;
 import java.net.Socket;
@@ -25,10 +20,13 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.BotnetImpl;
 
 /**
  *
- * @author haiclover
+ * @author ann52
  */
 public class RMIClient {
     
@@ -73,9 +71,7 @@ public class RMIClient {
             socket.close();
         } catch (RemoteException ex) {
             Logger.getLogger(RMIClient.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(RMIClient.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (AlreadyBoundException ex) {
+        } catch (MalformedURLException | AlreadyBoundException ex) {
             Logger.getLogger(RMIClient.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(RMIClient.class.getName()).log(Level.SEVERE, null, ex);
@@ -83,3 +79,4 @@ public class RMIClient {
         
     }
 }
+

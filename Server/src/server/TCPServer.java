@@ -5,27 +5,27 @@
  */
 package server;
 
-/**
- *
- * @author ligirk
- */
 import DBUtils.MongoConnect;
-import java.io.*;
-import java.net.*;
-import org.bson.Document;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
- * This program demonstrates a simple TCP/IP socket server.
  *
- * @author www.codejava.net
+ * @author ann52
  */
+
 public class TCPServer extends Thread {
-    private int port;
+    private final int port;
     
     public TCPServer(int port){
         this.port = port;
     }
 
+    @Override
     public void run() {
         
         try (ServerSocket serverSocket = new ServerSocket(port)) {
@@ -33,7 +33,6 @@ public class TCPServer extends Thread {
             client.Connect();
             Integer id = client.Read("bot_ip").size() + 1;
             System.out.println("Server is listening on port " + port);
-
             while (true) {
                 Socket socket = serverSocket.accept();
 //                System.out.println("New client connected");
@@ -46,7 +45,8 @@ public class TCPServer extends Thread {
 
         } catch (IOException ex) {
             System.out.println("Server exception: " + ex.getMessage());
-            ex.printStackTrace();
         }
     }
 }
+
+
