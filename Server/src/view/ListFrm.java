@@ -21,11 +21,11 @@ public class ListFrm extends javax.swing.JFrame {
         initComponents();
     }
 
-    public ListFrm(ArrayList list) {
+    public ListFrm(ArrayList list, ArrayList states) {
         initComponents();
         DefaultTableModel model = (DefaultTableModel) listTable.getModel();
         for (int i = 0; i < list.size(); i++) {
-            model.addRow(new Object[]{false, list.get(i)});
+            model.addRow(new Object[]{false, list.get(i), states.get(i)});
         }
     }
 
@@ -49,14 +49,14 @@ public class ListFrm extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Choosen", "IP"
+                "Choosen", "IP", "States"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.String.class
+                java.lang.Boolean.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false
+                true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -71,6 +71,7 @@ public class ListFrm extends javax.swing.JFrame {
         if (listTable.getColumnModel().getColumnCount() > 0) {
             listTable.getColumnModel().getColumn(0).setResizable(false);
             listTable.getColumnModel().getColumn(1).setResizable(false);
+            listTable.getColumnModel().getColumn(2).setResizable(false);
         }
 
         attackButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N

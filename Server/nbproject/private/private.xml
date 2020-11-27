@@ -3,9 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/NetBeansProjects/Server/src/DBUtils/MongoConnect.java</file>
-            <file>file:/E:/NetBeansProjects/Server/src/server/RMIServer.java</file>
-            <file>file:/E:/NetBeansProjects/Server/src/server/TCPServer.java</file>
+            <file>file:/home/ligirk/Workplace/study/PTIT/ltm/Simple-Botnet-RMI/Server/src/view/ServerUI.java</file>
+            <file>file:/home/ligirk/Workplace/study/PTIT/ltm/Simple-Botnet-RMI/Server/src/view/ListFrm.java</file>
+            <file>file:/home/ligirk/Workplace/study/PTIT/ltm/Simple-Botnet-RMI/Server/src/view/ActionFrm.java</file>
         </group>
     </open-files>
 </project-private>
