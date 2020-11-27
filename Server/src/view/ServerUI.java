@@ -82,7 +82,7 @@ public class ServerUI extends javax.swing.JFrame {
         for (String ip : list){
             try {
                 InetAddress inet = InetAddress.getByName(ip.substring(1));
-                if (inet.isReachable(5000)) {
+                if (inet.isReachable(1000)) {
                     states.add("Available");
                 }
                 else{
