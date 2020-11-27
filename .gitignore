@@ -2,7 +2,7 @@ Client/build/
 Client/dist/
 Server/build/
 Server/dist/
-/Client/nbproject/private/
-/Server/nbproject/private/
+Client/nbproject/private/
+Server/nbproject/private/
 /build/
 /dist/
