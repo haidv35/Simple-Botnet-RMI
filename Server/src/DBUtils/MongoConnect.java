@@ -27,7 +27,7 @@ public class MongoConnect {
     public void Connect(){
         MongoClient mongo = new MongoClient( "localhost" , 27017 ); 
         MongoCredential credential;
-	credential = MongoCredential.createCredential("admin", "Botnet", "vinai123".toCharArray());
+	credential = MongoCredential.createCredential("admin", "Botnet", "Haiclover99".toCharArray());
         this.database = mongo.getDatabase("Botnet");
         try{
             this.database.createCollection("bot_ip"); 

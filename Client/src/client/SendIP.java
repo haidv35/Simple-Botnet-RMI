@@ -27,7 +27,7 @@ public class SendIP extends Thread{
     public void run(){
         while(true){
             try {
-                Socket socket = new Socket("192.168.1.27", 2345);
+                Socket socket = new Socket("127.0.0.1", 2345);
                 BufferedWriter writer = new BufferedWriter (new OutputStreamWriter(socket.getOutputStream()));
                 if (ip != null){
                     writer.write(ip);

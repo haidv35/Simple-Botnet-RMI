@@ -31,16 +31,20 @@ public class TCPServer extends Thread {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             MongoConnect client = new MongoConnect();
             client.Connect();
+            
             Integer id = client.Read("bot_ip").size() + 1;
             System.out.println("Server is listening on port " + port);
             while (true) {
                 Socket socket = serverSocket.accept();
-//                System.out.println("New client connected");
                 InputStream input = socket.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(input));
                 String ip = reader.readLine();
                 client.Write(ip, id);
                 id++;
+                
+                reader.close();
+                input.close();
+                socket.close();
             }
 
         } catch (IOException ex) {
