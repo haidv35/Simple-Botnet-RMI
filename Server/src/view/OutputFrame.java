@@ -37,7 +37,7 @@ public class OutputFrame extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
         BotIP = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);

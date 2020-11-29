@@ -8,6 +8,7 @@ package view;
 import DBUtils.MongoConnect;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.rmi.Naming;
 import java.util.ArrayList;
@@ -42,6 +43,20 @@ public class ActionFrm extends javax.swing.JFrame {
         }
         selectedIPLabel.setText(label);
     }
+    public static boolean isValidURL(String url) 
+    { 
+        /* Try creating a valid URL */
+        try { 
+            new URL(url).toURI(); 
+            return true; 
+        } 
+          
+        // If there was an Exception 
+        // while creating URL object 
+        catch (Exception e) { 
+            return false; 
+        } 
+    } 
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -126,8 +141,12 @@ public class ActionFrm extends javax.swing.JFrame {
             if(linkApp.isEmpty())
             {
                 JOptionPane.showMessageDialog(rootPane, "Insert direct link", "Errors", JOptionPane.ERROR_MESSAGE);
+            } else if (!isValidURL(linkApp))
+            {
+                JOptionPane.showMessageDialog(rootPane, "Wrong link", "Errors", JOptionPane.ERROR_MESSAGE);
             } else
             {
+                System.out.println(linkApp);
                 Boolean result = true;
                 for (String ip : this.selectedIP){
                     try {
@@ -136,6 +155,8 @@ public class ActionFrm extends javax.swing.JFrame {
                         thread.start();
                         thread.join();
                         ArrayList <String> value = botrun.get_values();
+                         if (value == null) System.out.println("Fail");
+                        else
                         value.forEach(i -> System.out.println(i));
                     } catch (InterruptedException ex) {
                         result = false;
@@ -184,7 +205,6 @@ public class ActionFrm extends javax.swing.JFrame {
                     }
                 }
                 new RunningStates(this.selectedIP, states, output).setVisible(true);
-                this.setVisible(false);
 //                if(result)
 //                {
 //                    JOptionPane.showMessageDialog(rootPane, "Success");

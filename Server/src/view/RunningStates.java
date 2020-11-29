@@ -39,7 +39,7 @@ public class RunningStates extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         RunningList = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         RunningList.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -96,7 +96,6 @@ public class RunningStates extends javax.swing.JFrame {
         if (s.equals("Success")){
             String ip = (source.getModel().getValueAt(row, 0)+"").substring(1);
             new OutputFrame(ip, this.output.get(row)).setVisible(true);
-            this.setVisible(false);
         }
 
     }//GEN-LAST:event_RunningListMouseClicked
