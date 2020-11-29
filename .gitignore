@@ -6,3 +6,4 @@ Client/nbproject/private/
 Server/nbproject/private/
 /build/
 /dist/
+.DS_Store
