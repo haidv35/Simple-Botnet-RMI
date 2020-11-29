@@ -136,15 +136,17 @@ public class ActionFrm extends javax.swing.JFrame {
 
     private void installApplButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_installApplButtonActionPerformed
         // TODO add your handling code here:
-        String linkApp = JOptionPane.showInputDialog("Your direct link app");
+        String linkApp = JOptionPane.showInputDialog("Insert link/app");
         if (linkApp != null){
             if(linkApp.isEmpty())
             {
-                JOptionPane.showMessageDialog(rootPane, "Insert direct link", "Errors", JOptionPane.ERROR_MESSAGE);
-            } else if (!isValidURL(linkApp))
-            {
-                JOptionPane.showMessageDialog(rootPane, "Wrong link", "Errors", JOptionPane.ERROR_MESSAGE);
-            } else
+                JOptionPane.showMessageDialog(rootPane, "Insert link/app", "Errors", JOptionPane.ERROR_MESSAGE);
+            }
+//            else if (!isValidURL(linkApp))
+//            {
+//                JOptionPane.showMessageDialog(rootPane, "Wrong link", "Errors", JOptionPane.ERROR_MESSAGE);
+//            } 
+            else
             {
                 System.out.println(linkApp);
                 Boolean result = true;
