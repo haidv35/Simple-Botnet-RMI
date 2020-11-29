@@ -118,34 +118,18 @@ public class ServerUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void getTime(){
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
-        LocalDateTime now = LocalDateTime.now();  
-        System.out.println(dtf.format(now));  
-    }
     
     private void startBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startBtnActionPerformed
         // TODO add your handling code here:
         
-        System.out.println("First");
-        getTime();
-//        TCPServer tcpServer = new TCPServer(2345);
-//        tcpServer.start();
-        System.out.println("Second");
-        getTime();
+        TCPServer tcpServer = new TCPServer(2345);
+        tcpServer.start();
         
         MongoConnect client = new MongoConnect();
         client.Connect();
         
-        System.out.println("Third");
-        getTime();
-        
         ArrayList<String> list = client.Read("bot_ip");
         ArrayList<String> states = new ArrayList<>();
-        
-        
-        
-        
         
         for (String ip : list){
             
@@ -166,9 +150,6 @@ public class ServerUI extends javax.swing.JFrame {
                 System.out.println(ex.getMessage());
             }
         }
-        
-        System.out.println("Fourth");
-        getTime();
         
         
         new ListFrm(list, states).setVisible(true);
