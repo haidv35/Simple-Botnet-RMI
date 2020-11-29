@@ -45,6 +45,7 @@ public class ListFrm extends javax.swing.JFrame {
         listTable = new javax.swing.JTable();
         attackButton = new javax.swing.JButton();
         Refresh = new javax.swing.JButton();
+        attackAllButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -93,26 +94,37 @@ public class ListFrm extends javax.swing.JFrame {
             }
         });
 
+        attackAllButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        attackAllButton.setText("Attack All");
+        attackAllButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                attackAllButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(93, 93, 93)
+                .addGap(51, 51, 51)
                 .addComponent(Refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(45, 45, 45)
                 .addComponent(attackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(98, 98, 98))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(attackAllButton, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(attackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(attackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(attackAllButton, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30))
         );
 
@@ -155,6 +167,18 @@ public class ListFrm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_RefreshActionPerformed
 
+    private void attackAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attackAllButtonActionPerformed
+        // TODO add your handling code here:
+        ArrayList<String> selectedIP = new ArrayList<>();
+        DefaultTableModel model = (DefaultTableModel) listTable.getModel();
+        for(int i = 0; i < listTable.getRowCount(); i++){
+            String ip = (String)model.getValueAt(i, 1) + "";
+            selectedIP.add(ip);
+        }
+        new ActionFrm(selectedIP).setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_attackAllButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -192,6 +216,7 @@ public class ListFrm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Refresh;
+    private javax.swing.JButton attackAllButton;
     private javax.swing.JButton attackButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable listTable;
