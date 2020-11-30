@@ -5,6 +5,8 @@
  */
 package view;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
@@ -25,6 +27,20 @@ public class RunningStates extends javax.swing.JFrame {
         for (int i = 0; i < list.size(); i++) {
             model.addRow(new Object[]{list.get(i), states.get(i)});
         }
+        this.getContentPane().setBackground(Color.WHITE);
+        jScrollPane1.getViewport().setBackground(Color.WHITE);
+        closeButton.setBackground(Color.WHITE);
+        closeButton.setFont(new Font("Montserrat Medium", 400, 12));
+        closeButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                closeButton.setBackground(Color.RED);
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                closeButton.setBackground(Color.WHITE);
+            }
+        });
     }
 
     /**
@@ -72,6 +88,7 @@ public class RunningStates extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(RunningList);
 
+        closeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/close-icon.png"))); // NOI18N
         closeButton.setText("Close");
         closeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -93,7 +110,7 @@ public class RunningStates extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addComponent(closeButton)
                 .addGap(38, 38, 38))
         );

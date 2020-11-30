@@ -5,6 +5,8 @@
  */
 package view;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.util.ArrayList;
 
 /**
@@ -20,8 +22,21 @@ public class OutputFrame extends javax.swing.JFrame {
     private ArrayList<String> output;
     public OutputFrame(String ip, ArrayList<String> output) {
         initComponents();
-        BotIP.setText(ip);
+        BotIP.setText("IP: " + ip);
         output.forEach(i -> jTextArea1.append(i + "\n"));
+        this.getContentPane().setBackground(Color.WHITE);
+        closeButton.setBackground(Color.WHITE);
+        closeButton.setFont(new Font("Montserrat Medium", 400, 12));
+        closeButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                closeButton.setBackground(Color.RED);
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                closeButton.setBackground(Color.WHITE);
+            }
+        });
     }
 
     /**
@@ -40,6 +55,7 @@ public class OutputFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
@@ -48,6 +64,7 @@ public class OutputFrame extends javax.swing.JFrame {
         BotIP.setText("jLabel1");
         BotIP.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
+        closeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/close-icon.png"))); // NOI18N
         closeButton.setText("Close");
         closeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -59,15 +76,17 @@ public class OutputFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 518, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(228, 228, 228)
+                .addComponent(closeButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(452, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(closeButton)
-                        .addGap(105, 105, 105))
-                    .addComponent(BotIP, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(412, 412, 412))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(BotIP, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(111, 111, 111))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -75,9 +94,9 @@ public class OutputFrame extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(BotIP, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(closeButton)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();

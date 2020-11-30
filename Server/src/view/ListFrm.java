@@ -6,8 +6,12 @@
 package view;
 
 import DBUtils.MongoConnect;
+import java.awt.Color;
+import java.awt.Font;
 import java.rmi.Naming;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import model.IBotnet;
 
@@ -17,21 +21,73 @@ import model.IBotnet;
  */
 public class ListFrm extends javax.swing.JFrame {
 
-    /**
+   /**
      * Creates new form ListFrm
      */
+    private ArrayList listIP;
+    private ArrayList stateListIP;
     public ListFrm() {
         initComponents();
     }
 
     public ListFrm(ArrayList list, ArrayList states) {
+        this.listIP = list;
+        this.stateListIP = states;
         initComponents();
+        this.getContentPane().setBackground(Color.WHITE);
+        listTable.setBackground(Color.WHITE);
+        jScrollPane1.getViewport().setBackground(Color.WHITE);
+
         DefaultTableModel model = (DefaultTableModel) listTable.getModel();
         for (int i = 0; i < list.size(); i++) {
             model.addRow(new Object[]{false, list.get(i), states.get(i)});
         }
+        // custom combobox
+        filterComboBox.setBackground(Color.WHITE);
+        // custom button
+        Refresh.setBackground(Color.WHITE);
+        Refresh.setBorder(new LineBorder(Color.BLACK, 3));
+        Refresh.setFont(new Font("Montserrat Medium", 400, 20));
+        Refresh.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                Refresh.setBackground(Color.GREEN);
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                Refresh.setBackground(Color.WHITE);
+            }
+        });
+        //
+        attackButton.setBackground(Color.WHITE);
+        attackButton.setBorder(new LineBorder(Color.BLACK, 3));
+        attackButton.setFont(new Font("Montserrat Medium", 400, 20));
+        attackButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                attackButton.setBackground(Color.RED);
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                attackButton.setBackground(Color.WHITE);
+            }
+        });
+        //
+        attackAllButton.setBackground(Color.WHITE);
+        attackAllButton.setBorder(new LineBorder(Color.BLACK, 3));
+        attackAllButton.setFont(new Font("Montserrat Medium", 400, 20));
+        attackAllButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                attackAllButton.setBackground(Color.RED);
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                attackAllButton.setBackground(Color.WHITE);
+            }
+        });
+        filterComboBox.setSelectedIndex(0);
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -46,6 +102,7 @@ public class ListFrm extends javax.swing.JFrame {
         attackButton = new javax.swing.JButton();
         Refresh = new javax.swing.JButton();
         attackAllButton = new javax.swing.JButton();
+        filterComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,6 +137,7 @@ public class ListFrm extends javax.swing.JFrame {
         }
 
         attackButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        attackButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/tick.png"))); // NOI18N
         attackButton.setText("Attack");
         attackButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -87,6 +145,7 @@ public class ListFrm extends javax.swing.JFrame {
             }
         });
 
+        Refresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/refresh-page-option.png"))); // NOI18N
         Refresh.setText("Refresh");
         Refresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -95,6 +154,7 @@ public class ListFrm extends javax.swing.JFrame {
         });
 
         attackAllButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        attackAllButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/double-check.png"))); // NOI18N
         attackAllButton.setText("Attack All");
         attackAllButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -102,29 +162,43 @@ public class ListFrm extends javax.swing.JFrame {
             }
         });
 
+        filterComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All states", "Available", "Unavailable"}));
+        filterComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterComboBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addComponent(Refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
-                .addComponent(attackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addComponent(Refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(attackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(attackAllButton, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28))
+                .addComponent(attackAllButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(filterComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(filterComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(attackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(attackAllButton, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(attackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(attackAllButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30))
         );
 
@@ -135,19 +209,32 @@ public class ListFrm extends javax.swing.JFrame {
         // TODO add your handling code here:
         ArrayList<String> selectedIP = new ArrayList<>();
         DefaultTableModel model = (DefaultTableModel) listTable.getModel();
+        boolean flag = false;
         for(int i = 0; i < listTable.getRowCount(); i++){
             if((Boolean)model.getValueAt(i, 0) == true)
             {
-                String ip = (String)model.getValueAt(i, 1) + "";
-                selectedIP.add(ip);
+                if(model.getValueAt(i, 2).equals("Available")){
+                    String ip = (String)model.getValueAt(i, 1) + "";
+                    selectedIP.add(ip);
+                }
+                else flag = true;
             }
+        }
+        if(flag)
+        {
+            JOptionPane.showMessageDialog(rootPane, "Unavailable states will be ignore");
+        }
+        if(selectedIP.isEmpty())
+        {
+            JOptionPane.showMessageDialog(rootPane, "Invalid IP");
+            return ;
         }
         new ActionFrm(selectedIP).setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_attackButtonActionPerformed
 
     private void RefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshActionPerformed
-        // TODO add your handling code here:
+       // TODO add your handling code here:
         MongoConnect client = new MongoConnect();
         client.Connect();
         ArrayList<String> list = client.Read("bot_ip");
@@ -162,6 +249,8 @@ public class ListFrm extends javax.swing.JFrame {
         }
         DefaultTableModel model = (DefaultTableModel) listTable.getModel();
         model.setRowCount(0);
+        this.listIP = list;
+        this.stateListIP = states;
         for (int i = 0; i < list.size(); i++) {
             model.addRow(new Object[]{false, list.get(i), states.get(i)});
         }
@@ -171,13 +260,54 @@ public class ListFrm extends javax.swing.JFrame {
         // TODO add your handling code here:
         ArrayList<String> selectedIP = new ArrayList<>();
         DefaultTableModel model = (DefaultTableModel) listTable.getModel();
+        boolean flag = false;
         for(int i = 0; i < listTable.getRowCount(); i++){
-            String ip = (String)model.getValueAt(i, 1) + "";
-            selectedIP.add(ip);
+            if(model.getValueAt(i, 2).equals("Available")){
+                String ip = (String)model.getValueAt(i, 1) + "";
+                selectedIP.add(ip);
+            }
+            else flag = true;
+        }
+        if(flag)
+        {
+            JOptionPane.showMessageDialog(rootPane, "Unavailable states will be ignore");
+        }
+        if(selectedIP.isEmpty())
+        {
+            JOptionPane.showMessageDialog(rootPane, "Invalid IP");
+            return ;
         }
         new ActionFrm(selectedIP).setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_attackAllButtonActionPerformed
+
+    private void filterComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterComboBoxActionPerformed
+       // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) listTable.getModel();
+        for (int i = model.getRowCount() - 1; i >= 0; i--) {
+            model.removeRow(i);
+        }
+        if(filterComboBox.getSelectedItem().toString().equals("Unavailable"))
+        {
+            for (int i = 0; i < this.listIP.size(); i++) {
+                if(this.stateListIP.get(i).equals("Unavailable"))
+                model.addRow(new Object[]{false, this.listIP.get(i), this.stateListIP.get(i)});
+            }
+        }
+        if(filterComboBox.getSelectedItem().toString().equals("Available"))
+        {
+            for (int i = 0; i < this.listIP.size(); i++) {
+                if(this.stateListIP.get(i).equals("Available"))
+                model.addRow(new Object[]{false, this.listIP.get(i), this.stateListIP.get(i)});
+            }
+        }
+        if(filterComboBox.getSelectedItem().toString().equals("All states"))
+        {
+            for (int i = 0; i < this.listIP.size(); i++) {
+                model.addRow(new Object[]{false, this.listIP.get(i), this.stateListIP.get(i)});
+            }
+        }
+    }//GEN-LAST:event_filterComboBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -218,6 +348,7 @@ public class ListFrm extends javax.swing.JFrame {
     private javax.swing.JButton Refresh;
     private javax.swing.JButton attackAllButton;
     private javax.swing.JButton attackButton;
+    private javax.swing.JComboBox<String> filterComboBox;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable listTable;
     // End of variables declaration//GEN-END:variables

@@ -6,6 +6,8 @@
 package view;
 
 import DBUtils.MongoConnect;
+import java.awt.Color;
+import java.awt.Font;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.border.LineBorder;
 import model.IBotnet;
 import server.BotnetRun;
 import server.TCPServer;
@@ -42,6 +45,49 @@ public class ActionFrm extends javax.swing.JFrame {
             label += selectedIP.get(i) + " \n ";
         }
         selectedIPLabel.setText(label);
+        this.getContentPane().setBackground(Color.WHITE);
+        //custom button
+        installApplButton.setBackground(Color.WHITE);
+        installApplButton.setBorder(new LineBorder(Color.BLACK, 3));
+        installApplButton.setFont(new Font("Montserrat Medium", 400, 15));
+        installApplButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                installApplButton.setBackground(Color.RED);
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                installApplButton.setBackground(Color.WHITE);
+            }
+        });
+        //
+        runShellButton.setBackground(Color.WHITE);
+        runShellButton.setBorder(new LineBorder(Color.BLACK, 3));
+        runShellButton.setFont(new Font("Montserrat Medium", 400, 15));
+        runShellButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                runShellButton.setBackground(Color.RED);
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                runShellButton.setBackground(Color.WHITE);
+            }
+        });
+        //
+        backButton.setBackground(Color.WHITE);
+        backButton.setBorder(new LineBorder(Color.BLACK, 2));
+        backButton.setFont(new Font("Montserrat Medium", 300, 12));
+        backButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                backButton.setBackground(Color.RED);
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                backButton.setBackground(Color.WHITE);
+            }
+        });
     }
     public static boolean isValidURL(String url) 
     { 
@@ -74,8 +120,10 @@ public class ActionFrm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        selectedIPLabel.setFont(new java.awt.Font("Montserrat", 0, 14)); // NOI18N
         selectedIPLabel.setText("Selected IP:");
 
+        installApplButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/install.png"))); // NOI18N
         installApplButton.setText("Install App");
         installApplButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -83,6 +131,7 @@ public class ActionFrm extends javax.swing.JFrame {
             }
         });
 
+        runShellButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/terminal.png"))); // NOI18N
         runShellButton.setText("Run Shell");
         runShellButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -90,6 +139,7 @@ public class ActionFrm extends javax.swing.JFrame {
             }
         });
 
+        backButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/back.png"))); // NOI18N
         backButton.setText("Back");
         backButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -110,11 +160,11 @@ public class ActionFrm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(selectedIPLabel))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(31, 31, 31)
-                        .addComponent(backButton)))
+                        .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(selectedIPLabel)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -126,8 +176,8 @@ public class ActionFrm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(installApplButton, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(runShellButton, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
-                .addComponent(backButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 123, Short.MAX_VALUE)
+                .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
